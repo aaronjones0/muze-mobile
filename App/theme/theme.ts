@@ -1,4 +1,4 @@
-import { convert } from 'color-convert';
+// import { convert } from 'color-convert';
 import { createTheme } from '@shopify/restyle';
 
 const palette = {
@@ -75,37 +75,100 @@ const primarySaturation = 92;
 const primaryLightness = 50;
 
 const lightPalette = {
-  primary: convert.hex.hsl(primaryHue, primarySaturation, primaryLightness),
-  text1: convert.hex.hsl(primaryHue, primarySaturation, 10),
-  text2: convert.hex.hsl(primaryHue, 30, 30),
-  surface1: convert.hex.hsl(primaryHue, 25, 90),
-  surface2: convert.hex.hsl(primaryHue, 20, 99),
-  surface3: convert.hex.hsl(primaryHue, 20, 92),
-  surface4: convert.hex.hsl(primaryHue, 20, 85),
-  surfaceShadow: convert.hex.hsl(primaryHue, 10, 20),
+  primary: '#F59F0A', // convert.hex.hsl(primaryHue, primarySaturation, primaryLightness),
+  text1: '#312002', // convert.hex.hsl(primaryHue, primarySaturation, 10),
+  text2: '#635336', // convert.hex.hsl(primaryHue, 30, 30),
+  surface1: '#ECE7DF',
+  // surface1: convert.hex.hsl(primaryHue, 25, 90),
+  surface2: '#FDFDFC', // convert.hex.hsl(primaryHue, 20, 99),
+  surface3: '#EFECE7', // convert.hex.hsl(primaryHue, 20, 92),
+  surface4: '#E1DBD1', // convert.hex.hsl(primaryHue, 20, 85),
+  surfaceShadow: '#38342E', // convert.hex.hsl(primaryHue, 10, 20),
   shadowStrength: 0.2,
 };
 
-const darkPalette = {
-  primary: convert.hex.hsl(primaryHue, primarySaturation / 2, primaryLightness / 1.5),
-  text1: convert.hex.hsl(primaryHue, 15, 85),
-  text2: convert.hex.hsl(primaryHue, 5, 65),
-  surface1: convert.hex.hsl(primaryHue, 10, 10),
-  surface2: convert.hex.hsl(primaryHue, 10, 15),
-  surface3: convert.hex.hsl(primaryHue, 5, 20),
-  surface4: convert.hex.hsl(primaryHue, 5, 25),
-  surfaceShadow: convert.hex.hsl(primaryHue, 50, 3),
-  shadowStrength: 0.8,
-}
+// const darkPalette = {
+//   primary: convert.hex.hsl(
+//     primaryHue,
+//     primarySaturation / 2,
+//     primaryLightness / 1.5
+//   ),
+//   text1: convert.hex.hsl(primaryHue, 15, 85),
+//   text2: convert.hex.hsl(primaryHue, 5, 65),
+//   surface1: convert.hex.hsl(primaryHue, 10, 10),
+//   surface2: convert.hex.hsl(primaryHue, 10, 15),
+//   surface3: convert.hex.hsl(primaryHue, 5, 20),
+//   surface4: convert.hex.hsl(primaryHue, 5, 25),
+//   surfaceShadow: convert.hex.hsl(primaryHue, 50, 3),
+//   shadowStrength: 0.8,
+// };
 
-const dimPalette = {
-  primary: convert.hex.hsl(primaryHue, primarySaturation / 1.25, primaryLightness / 1.25),
-  text1: convert.hex.hsl(primaryHue, 15, 75),
-  text2: convert.hex.hsl(primaryHue, 10, 61),
-  surface1: convert.hex.hsl(primaryHue, 10, 20),
-  surface2: convert.hex.hsl(primaryHue, 10, 25),
-  surface3: convert.hex.hsl(primaryHue, 5, 30),
-  surface4: convert.hex.hsl(primaryHue, 5, 35),
-  surfaceShadow: convert.hex.hsl(primaryHue, 30, 13),
-  shadowStrength: 0.2,
-}
+// const dimPalette = {
+//   primary: convert.hex.hsl(
+//     primaryHue,
+//     primarySaturation / 1.25,
+//     primaryLightness / 1.25
+//   ),
+//   text1: convert.hex.hsl(primaryHue, 15, 75),
+//   text2: convert.hex.hsl(primaryHue, 10, 61),
+//   surface1: convert.hex.hsl(primaryHue, 10, 20),
+//   surface2: convert.hex.hsl(primaryHue, 10, 25),
+//   surface3: convert.hex.hsl(primaryHue, 5, 30),
+//   surface4: convert.hex.hsl(primaryHue, 5, 35),
+//   surfaceShadow: convert.hex.hsl(primaryHue, 30, 13),
+//   shadowStrength: 0.8,
+// };
+
+const theme = createTheme({
+  colors: {
+    primary: lightPalette.primary,
+    secondary: lightPalette.text1,
+    text1: lightPalette.text1,
+    text2: lightPalette.text2,
+    backgroundSurface: lightPalette.surface1,
+    primarySurface: lightPalette.surface2,
+    cardSurface: lightPalette.surface3,
+    panelSurface: lightPalette.surface4,
+    shadowColor: lightPalette.surfaceShadow,
+  },
+  spacing: {
+    s: 1,
+    s1: 2,
+    s2: 4,
+    s3: 6,
+    s4: 8,
+    s5: 10,
+    s6: 12,
+    s8: 16,
+    s10: 20,
+    s12: 24,
+    s14: 28,
+    s16: 32,
+    s20: 40,
+    s24: 48,
+    s28: 56,
+    s32: 64,
+    s40: 80,
+  },
+  textVariants: {
+    h1: {
+      fontSize: 32,
+      fontWeight: 900,
+      color: 'text2',
+    },
+    body: {
+      fontSize: 16,
+    },
+    label: {
+      fontSize: 16,
+      color: 'text2',
+    },
+    defaults: {
+      fontSize: 16,
+      color: 'text1',
+    },
+  },
+});
+
+export type Theme = typeof theme;
+export default theme;
