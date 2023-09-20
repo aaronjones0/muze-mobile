@@ -7,7 +7,13 @@ import { Theme } from '../../theme/theme';
 import Box from '../Box/Box';
 import Text from '../Text/Text';
 
-export default function Account({ session }: { session: Session }) {
+export default function Account({
+  session,
+  navigation,
+}: {
+  session: Session;
+  navigation: any;
+}) {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState('');
   const [website, setWebsite] = useState('');
@@ -86,7 +92,7 @@ export default function Account({ session }: { session: Session }) {
 
   return (
     <Box
-      backgroundColor='cardSurface'
+      backgroundColor='primarySurface'
       marginVertical='s40'
       marginHorizontal='s20'
       borderRadius={48}
@@ -103,13 +109,18 @@ export default function Account({ session }: { session: Session }) {
       </Text>
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Text variant='label'>Email</Text>
-        <TextInput editable={false} value={session?.user?.email} />
+        <TextInput
+          editable={false}
+          value={session?.user?.email}
+          style={{ fontSize: 16, fontWeight: '500', color: colors.text1 }}
+        />
       </View>
       <View style={styles.verticallySpaced}>
         <Text variant='label'>Username</Text>
         <TextInput
           value={username || ''}
           onChangeText={(text) => setUsername(text)}
+          style={{ fontSize: 16, color: colors.text2 }}
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
@@ -127,6 +138,14 @@ export default function Account({ session }: { session: Session }) {
         <Button
           title='Sign Out'
           onPress={() => supabase.auth.signOut()}
+          color={colors.primary}
+        />
+      </View>
+
+      <View style={styles.verticallySpaced}>
+        <Button
+          title='Home'
+          onPress={() => navigation.navigate('Home')}
           color={colors.primary}
         />
       </View>
