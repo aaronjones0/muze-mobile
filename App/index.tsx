@@ -19,34 +19,16 @@ export default function App() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log('supabase.auth.getSession().then()');
       setSession(session);
     });
 
     supabase.auth.onAuthStateChange((_event, session) => {
-      console.log('supabase.auth.onAuthStateChange()');
       setSession(session);
     });
   }, []);
 
   return (
     <ThemeProvider theme={theme}>
-      <Box
-        backgroundColor='backgroundSurface'
-        style={{
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-        }}
-      >
-        {session && session.user ? (
-          <Account key={session.user.id} session={session} />
-        ) : (
-          <Auth />
-        )}
-        <StatusBar style='auto' />
-      </Box>
       <NavigationContainer>
         <Box
           backgroundColor='primarySurface'
@@ -61,7 +43,7 @@ export default function App() {
             <Stack.Navigator
               screenOptions={{
                 headerStyle: {
-                  backgroundColor: theme.colors.primarySurface,
+                  backgroundColor: theme.colors.panelSurface,
                 },
                 headerTintColor: theme.colors.text1,
                 headerTitleStyle: {

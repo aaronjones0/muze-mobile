@@ -20,15 +20,10 @@ export default function Home({ navigation }) {
       <Text variant='h1'>Home</Text>
       <Box style={{display: 'flex', flexDirection: 'row', width: '100%', gap: 16}}>
         <Box
-          backgroundColor='backgroundSurface'
-          borderColor='backgroundSurfaceBorder'
-          borderTopWidth={1}
-          borderLeftWidth={1}
-          borderRightWidth={1}
+          backgroundColor='primary'
           borderRadius={24}
-          paddingVertical='s2'
           shadowColor='shadowColor'
-          shadowOffset={{ width: 0, height: 10 }}
+          shadowOffset={{ width: 0, height: 4 }}
           shadowRadius={8}
           shadowOpacity={0.8}
           flexGrow={1}
@@ -36,19 +31,14 @@ export default function Home({ navigation }) {
           <Button
             title='Collection'
             onPress={() => navigation.navigate('Collection')}
-            color={theme.colors.primary}
+            color={theme.colors.primaryText}
           />
         </Box>
         <Box
-          backgroundColor='backgroundSurface'
-          borderColor='backgroundSurfaceBorder'
-          borderTopWidth={1}
-          borderLeftWidth={1}
-          borderRightWidth={1}
+          backgroundColor='primary'
           borderRadius={24}
-          paddingVertical='s2'
           shadowColor='shadowColor'
-          shadowOffset={{ width: 0, height: 10 }}
+          shadowOffset={{ width: 0, height: 4 }}
           shadowRadius={8}
           shadowOpacity={0.8}
           flexGrow={1}
@@ -56,7 +46,7 @@ export default function Home({ navigation }) {
           <Button
             title='Account'
             onPress={() => navigation.navigate('Account')}
-            color={theme.colors.primary}
+            color={theme.colors.primaryText}
           />
         </Box>
       </Box>

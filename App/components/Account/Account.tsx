@@ -7,7 +7,13 @@ import { Theme } from '../../theme/theme';
 import Box from '../Box/Box';
 import Text from '../Text/Text';
 
-export default function Account({ session, navigation }: { session: Session; navigation: any; }) {
+export default function Account({
+  session,
+  navigation,
+}: {
+  session: Session;
+  navigation: any;
+}) {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState('');
   const [website, setWebsite] = useState('');
@@ -86,21 +92,18 @@ export default function Account({ session, navigation }: { session: Session; nav
 
   return (
     <Box
-      backgroundColor='cardSurface'
-      marginVertical='s40'
-      marginHorizontal='s20'
-      borderRadius={48}
-      shadowColor='shadowColor'
-      shadowOffset={{ width: 0, height: 12 }}
-      shadowRadius={12}
-      shadowOpacity={0.2}
+      backgroundColor='backgroundSurface'
       paddingTop='s20'
-      paddingBottom='s10'
+      paddingBottom='s40'
       paddingHorizontal='s20'
+      height='100%'
+      flex={1}
+      flexDirection='column'
+      justifyContent='space-between'
     >
       <Box
-        backgroundColor='backgroundSurface'
-        borderColor='backgroundSurfaceBorder'
+        backgroundColor='primarySurface'
+        borderColor='primarySurfaceBorder'
         borderRadius={48}
         shadowColor='shadowColor'
         shadowOffset={{ width: 0, height: 12 }}
