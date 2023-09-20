@@ -99,7 +99,11 @@ export default function Collection({ navigation }) {
         </Box>
       </Box>
       <Box
-        backgroundColor='primary'
+        backgroundColor='backgroundSurface'
+        borderColor='backgroundSurfaceBorder'
+        borderLeftWidth={1}
+        borderTopWidth={1}
+        borderRightWidth={1}
         borderRadius={24}
         shadowColor='shadowColor'
         shadowOffset={{ width: 0, height: 4 }}
@@ -109,7 +113,7 @@ export default function Collection({ navigation }) {
         <Button
           title='Home'
           onPress={() => navigation.navigate('Home')}
-          color={theme.colors.primaryText}
+          color={theme.colors.primary}
         />
       </Box>
     </Box>
