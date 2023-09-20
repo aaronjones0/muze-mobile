@@ -1,13 +1,21 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabase';
-import { StyleSheet, View, Alert, Text, TextInput, Button } from 'react-native';
+import { StyleSheet, View, Alert, TextInput, Button } from 'react-native';
 import { Session } from '@supabase/supabase-js';
+import { useTheme } from '@shopify/restyle';
+import { Theme } from '../../theme/theme';
+import Box from '../Box/Box';
+import Text from '../Text/Text';
 
 export default function Account({ session }: { session: Session }) {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState('');
   const [website, setWebsite] = useState('');
   const [avatarUrl, setAvatarUrl] = useState('');
+
+  const theme = useTheme<Theme>();
+  const colors = theme.colors;
+  const spacing = theme.spacing;
 
   useEffect(() => {
     if (session) getProfile();
@@ -77,40 +85,52 @@ export default function Account({ session }: { session: Session }) {
   }
 
   return (
-    <View style={styles.container}>
+    <Box
+      backgroundColor='cardSurface'
+      marginVertical='s40'
+      marginHorizontal='s20'
+      borderRadius={48}
+      shadowColor='shadowColor'
+      shadowOffset={{ width: 0, height: 12 }}
+      shadowRadius={12}
+      shadowOpacity={0.2}
+      paddingTop='s20'
+      paddingBottom='s10'
+      paddingHorizontal='s20'
+    >
+      <Text variant='h1' marginBottom='s10'>
+        Account
+      </Text>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Text>Email</Text>
+        <Text variant='label'>Email</Text>
         <TextInput editable={false} value={session?.user?.email} />
       </View>
       <View style={styles.verticallySpaced}>
-        <Text>Username</Text>
+        <Text variant='label'>Username</Text>
         <TextInput
           value={username || ''}
           onChangeText={(text) => setUsername(text)}
         />
       </View>
-      <View style={styles.verticallySpaced}>
-        <Text>Website</Text>
-        <TextInput
-          value={website || ''}
-          onChangeText={(text) => setWebsite(text)}
-        />
-      </View>
-
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Button
           title={loading ? 'Loading ...' : 'Update'}
           onPress={() =>
             updateProfile({ username, website, avatar_url: avatarUrl })
           }
+          color={colors.primary}
           disabled={loading}
         />
       </View>
 
       <View style={styles.verticallySpaced}>
-        <Button title='Sign Out' onPress={() => supabase.auth.signOut()} />
+        <Button
+          title='Sign Out'
+          onPress={() => supabase.auth.signOut()}
+          color={colors.primary}
+        />
       </View>
-    </View>
+    </Box>
   );
 }
 
