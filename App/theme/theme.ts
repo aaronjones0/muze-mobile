@@ -88,13 +88,17 @@ const lightPalette = {
 };
 
 const darkPalette = {
-  primary: '#7C5F2E', // convert.hex.hsl(primaryHue,primarySaturation / 2,primaryLightness / 1.5),
+  primary: '#C98F2C', // convert.hex.hsl(primaryHue,primarySaturation / 2,primaryLightness / 1.5),
   text1: '#DEDAD3', // convert.hex.hsl(primaryHue, 15, 85),
   text2: '#AAA7A1', // convert.hex.hsl(primaryHue, 5, 65),
   surface1: '#1C1A17', // convert.hex.hsl(primaryHue, 10, 10),
+  surface1Border: '#282724',
   surface2: '#2A2722', // convert.hex.hsl(primaryHue, 10, 15),
+  surface2Border: '#38342E',
   surface3: '#363430', // convert.hex.hsl(primaryHue, 5, 20),
+  surface3Border: '#43413D',
   surface4: '#43413D', // convert.hex.hsl(primaryHue, 5, 25),
+  surface4Border: '#504E49',
   surfaceShadow: '#0B0904', // convert.hex.hsl(primaryHue, 50, 3),
   shadowStrength: 0.8,
 };
@@ -117,15 +121,20 @@ const darkPalette = {
 
 const theme = createTheme({
   colors: {
-    primary: lightPalette.primary,
-    secondary: lightPalette.text1,
-    text1: lightPalette.text1,
-    text2: lightPalette.text2,
-    backgroundSurface: lightPalette.surface1,
-    primarySurface: lightPalette.surface2,
-    cardSurface: lightPalette.surface3,
-    panelSurface: lightPalette.surface4,
-    shadowColor: lightPalette.surfaceShadow,
+    primary: darkPalette.primary,
+    primaryText: darkPalette.surface1,
+    secondary: darkPalette.text1,
+    text1: darkPalette.text1,
+    text2: darkPalette.text2,
+    backgroundSurface: darkPalette.surface1,
+    backgroundSurfaceBorder: darkPalette.surface1Border,
+    primarySurface: darkPalette.surface2,
+    primarySurfaceBorder: darkPalette.surface2Border,
+    cardSurface: darkPalette.surface3,
+    cardSurfaceBorder: darkPalette.surface3Border,
+    panelSurface: darkPalette.surface4,
+    panelSurfaceBorder: darkPalette.surface4Border,
+    shadowColor: darkPalette.surfaceShadow,
   },
   spacing: {
     s: 1,
@@ -154,6 +163,7 @@ const theme = createTheme({
     },
     body: {
       fontSize: 16,
+      color: 'text1',
     },
     label: {
       fontSize: 16,

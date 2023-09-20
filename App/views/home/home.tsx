@@ -1,25 +1,55 @@
-import { StyleSheet, Text, View } from "react-native";
-import BubbleButton from "../../components/BubbleButton/BubbleButton";
+import { Button } from 'react-native';
+import Box from '../../components/Box/Box';
+import Text from '../../components/Text/Text';
+import { useTheme } from '@shopify/restyle';
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        width: '100%',
-        justifyContent: 'center',
-        backgroundColor: '#262626',
-        alignItems: 'center',
-        color: '#F5F5F5'
-    },
-    text: {
-        color: '#F5F5F5'
-    }
-})
+export default function Home({ navigation }) {
+  const theme = useTheme();
 
-export default function Home() {
-    return (
-        <View style={styles.container}>
-            <Text style={styles.text}>Home</Text>
-            <BubbleButton />
-        </View>
-    );
+  return (
+    <Box
+      backgroundColor='backgroundSurface'
+      height='100%'
+      paddingHorizontal='s20'
+      paddingTop='s20'
+      paddingBottom='s40'
+      flex={1}
+      flexDirection='column'
+      justifyContent='space-between'
+    >
+      <Text variant='h1'>Home</Text>
+      <Box style={{display: 'flex', flexDirection: 'row', width: '100%', gap: 16}}>
+        <Box
+          backgroundColor='primary'
+          borderRadius={24}
+          shadowColor='shadowColor'
+          shadowOffset={{ width: 0, height: 4 }}
+          shadowRadius={8}
+          shadowOpacity={0.8}
+          flexGrow={1}
+        >
+          <Button
+            title='Collection'
+            onPress={() => navigation.navigate('Collection')}
+            color={theme.colors.primaryText}
+          />
+        </Box>
+        <Box
+          backgroundColor='primary'
+          borderRadius={24}
+          shadowColor='shadowColor'
+          shadowOffset={{ width: 0, height: 4 }}
+          shadowRadius={8}
+          shadowOpacity={0.8}
+          flexGrow={1}
+        >
+          <Button
+            title='Account'
+            onPress={() => navigation.navigate('Account')}
+            color={theme.colors.primaryText}
+          />
+        </Box>
+      </Box>
+    </Box>
+  );
 }

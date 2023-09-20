@@ -7,7 +7,13 @@ import { Theme } from '../../theme/theme';
 import Box from '../Box/Box';
 import Text from '../Text/Text';
 
-export default function Account({ session }: { session: Session }) {
+export default function Account({
+  session,
+  navigation,
+}: {
+  session: Session;
+  navigation: any;
+}) {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState('');
   const [website, setWebsite] = useState('');
@@ -86,50 +92,83 @@ export default function Account({ session }: { session: Session }) {
 
   return (
     <Box
-      backgroundColor='cardSurface'
-      marginVertical='s40'
-      marginHorizontal='s20'
-      borderRadius={48}
-      shadowColor='shadowColor'
-      shadowOffset={{ width: 0, height: 12 }}
-      shadowRadius={12}
-      shadowOpacity={0.2}
+      backgroundColor='backgroundSurface'
       paddingTop='s20'
-      paddingBottom='s10'
+      paddingBottom='s40'
       paddingHorizontal='s20'
+      height='100%'
+      flex={1}
+      flexDirection='column'
+      justifyContent='space-between'
     >
-      <Text variant='h1' marginBottom='s10'>
-        Account
-      </Text>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Text variant='label'>Email</Text>
-        <TextInput editable={false} value={session?.user?.email} />
-      </View>
-      <View style={styles.verticallySpaced}>
-        <Text variant='label'>Username</Text>
-        <TextInput
-          value={username || ''}
-          onChangeText={(text) => setUsername(text)}
-        />
-      </View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Button
-          title={loading ? 'Loading ...' : 'Update'}
-          onPress={() =>
-            updateProfile({ username, website, avatar_url: avatarUrl })
-          }
-          color={colors.primary}
-          disabled={loading}
-        />
-      </View>
+      <Box
+        backgroundColor='primarySurface'
+        borderColor='primarySurfaceBorder'
+        borderRadius={48}
+        shadowColor='shadowColor'
+        shadowOffset={{ width: 0, height: 12 }}
+        shadowRadius={12}
+        shadowOpacity={0.8}
+        paddingTop='s20'
+        paddingBottom='s10'
+        paddingHorizontal='s20'
+        borderTopWidth={1}
+        borderLeftWidth={1}
+        borderRightWidth={1}
+        borderBottomWidth={0}
+      >
+        <Text variant='h1' marginBottom='s10'>
+          Account
+        </Text>
+        <View style={[styles.verticallySpaced, styles.mt20]}>
+          <Text variant='label'>Email</Text>
+          <TextInput
+            editable={false}
+            value={session?.user?.email}
+            style={{ fontSize: 16, fontWeight: '500', color: colors.text1 }}
+          />
+        </View>
+        <View style={styles.verticallySpaced}>
+          <Text variant='label'>Username</Text>
+          <TextInput
+            value={username || ''}
+            onChangeText={(text) => setUsername(text)}
+            style={{ fontSize: 16, color: colors.text2 }}
+          />
+        </View>
+        <View style={[styles.verticallySpaced, styles.mt20]}>
+          <Button
+            title={loading ? 'Loading ...' : 'Update'}
+            onPress={() =>
+              updateProfile({ username, website, avatar_url: avatarUrl })
+            }
+            color={colors.primary}
+            disabled={loading}
+          />
+        </View>
 
-      <View style={styles.verticallySpaced}>
+        <View style={styles.verticallySpaced}>
+          <Button
+            title='Sign Out'
+            onPress={() => supabase.auth.signOut()}
+            color={colors.primary}
+          />
+        </View>
+      </Box>
+      <Box
+        backgroundColor='primary'
+        borderRadius={24}
+        shadowColor='shadowColor'
+        shadowOffset={{ width: 0, height: 4 }}
+        shadowRadius={8}
+        shadowOpacity={0.8}
+      >
         <Button
-          title='Sign Out'
-          onPress={() => supabase.auth.signOut()}
-          color={colors.primary}
+          title='Home'
+          onPress={() => navigation.navigate('Home')}
+          color={theme.colors.primaryText}
         />
-      </View>
+      </Box>
     </Box>
   );
 }
