@@ -87,21 +87,17 @@ const lightPalette = {
   shadowStrength: 0.2,
 };
 
-// const darkPalette = {
-//   primary: convert.hex.hsl(
-//     primaryHue,
-//     primarySaturation / 2,
-//     primaryLightness / 1.5
-//   ),
-//   text1: convert.hex.hsl(primaryHue, 15, 85),
-//   text2: convert.hex.hsl(primaryHue, 5, 65),
-//   surface1: convert.hex.hsl(primaryHue, 10, 10),
-//   surface2: convert.hex.hsl(primaryHue, 10, 15),
-//   surface3: convert.hex.hsl(primaryHue, 5, 20),
-//   surface4: convert.hex.hsl(primaryHue, 5, 25),
-//   surfaceShadow: convert.hex.hsl(primaryHue, 50, 3),
-//   shadowStrength: 0.8,
-// };
+const darkPalette = {
+  primary: '#7C5F2E', // convert.hex.hsl(primaryHue,primarySaturation / 2,primaryLightness / 1.5),
+  text1: '#DEDAD3', // convert.hex.hsl(primaryHue, 15, 85),
+  text2: '#AAA7A1', // convert.hex.hsl(primaryHue, 5, 65),
+  surface1: '#1C1A17', // convert.hex.hsl(primaryHue, 10, 10),
+  surface2: '#2A2722', // convert.hex.hsl(primaryHue, 10, 15),
+  surface3: '#363430', // convert.hex.hsl(primaryHue, 5, 20),
+  surface4: '#43413D', // convert.hex.hsl(primaryHue, 5, 25),
+  surfaceShadow: '#0B0904', // convert.hex.hsl(primaryHue, 50, 3),
+  shadowStrength: 0.8,
+};
 
 // const dimPalette = {
 //   primary: convert.hex.hsl(
