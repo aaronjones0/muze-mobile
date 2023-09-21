@@ -6,6 +6,7 @@ import { useTheme } from '@shopify/restyle';
 import { Theme } from '../../theme/theme';
 import Box from '../Box/Box';
 import Text from '../Text/Text';
+import Avatar from '../Avatar/Avatar';
 
 export default function Account({
   session,
@@ -121,6 +122,16 @@ export default function Account({
           Account
         </Text>
         <View style={[styles.verticallySpaced, styles.mt20]}>
+          <Box height={200}>
+            <Avatar
+              url={avatarUrl}
+              size={150}
+              onUpload={(url: string) => {
+                setAvatarUrl(url);
+                updateProfile({ username, website, avatar_url: url });
+              }}
+            />
+          </Box>
           <Text variant='label'>Email</Text>
           <TextInput
             editable={false}
