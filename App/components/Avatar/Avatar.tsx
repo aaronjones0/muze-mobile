@@ -1,13 +1,19 @@
-import { useState, useEffect } from 'react';
-import { supabase } from '../../../lib/supabase';
-import { StyleSheet, View, Alert, Image, Button } from 'react-native';
+import { useTheme } from '@shopify/restyle';
+import { useEffect, useState } from 'react';
+import { Alert, Button, Image, StyleSheet, View } from 'react-native';
 import DocumentPicker, {
   isCancel,
   isInProgress,
   types,
 } from 'react-native-document-picker';
+import { supabase } from '../../../lib/supabase';
 import Box from '../Box/Box';
-import { backgroundColor, useTheme } from '@shopify/restyle';
+import { useAuth } from '../../../lib/providers/AuthProvider';
+import { FileObject } from '@supabase/storage-js';
+import ImageBox from '../ImageBox/ImageBox';
+import * as ImagePicker from 'expo-image-picker';
+import { readAsStringAsync } from 'expo-file-system';
+import { decode } from 'base64-arraybuffer';
 
 interface Props {
   size: number;
@@ -16,11 +22,64 @@ interface Props {
 }
 
 export default function Avatar({ url, size = 150, onUpload }: Props) {
+  const { user } = useAuth();
+  const [avatar, setAvatar] = useState<FileObject | null>(null);
+
   const [uploading, setUploading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const avatarSize = { height: size, width: size };
 
   const theme = useTheme();
+
+  useEffect(() => {
+    if (!user) return;
+
+    // Load user avatar
+    loadAvatar();
+  }, [user]);
+
+  const loadAvatar = async () => {
+    const { data } = await supabase.storage.from('avatars').list(user!.id);
+    if (data) {
+      setAvatar(data[0]);
+    }
+  };
+
+  const onSelectImage = async () => {
+    const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!granted) {
+      return;
+    }
+
+    const options: ImagePicker.ImagePickerOptions = {
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+    };
+
+    const result = await ImagePicker.launchImageLibraryAsync(options);
+
+    // Save image if not cancelled
+    if (!result.canceled) {
+      const img = result.assets[0];
+      const base64 = await readAsStringAsync(img.uri, {
+        encoding: 'base64',
+      });
+      const filePath = `${user!.id}/${new Date().getTime()}.${
+        img.type === 'image' ? 'png' : 'mp4'
+      }`;
+      const contentType = img.type === 'image' ? 'image/png' : 'video/mp4';
+      await supabase.storage
+        .from('avatars')
+        .upload(filePath, decode(base64), { contentType });
+      loadAvatar();
+    }
+  };
+
+  const onRemoveImage = async (item: FileObject) => {
+    supabase.storage.from('avatars').remove([`${user!.id}/${item.name}`]);
+    setAvatar(null);
+  };
 
   useEffect(() => {
     if (url) downloadImage(url);
@@ -107,10 +166,16 @@ export default function Avatar({ url, size = 150, onUpload }: Props) {
       alignItems='center'
     >
       {avatarUrl ? (
-        <Image
-          source={{ uri: avatarUrl }}
-          accessibilityLabel='Avatar'
-          style={[avatarSize, styles.avatar, styles.image]}
+        // <Image
+        //   source={{ uri: avatarUrl }}
+        //   accessibilityLabel='Avatar'
+        //   style={[avatarSize, styles.avatar, styles.image]}
+        // />
+        <ImageBox
+          key={avatar.id}
+          item={avatar}
+          userId={user!.id}
+          onRemoveImage={() => onRemoveImage(avatar)}
         />
       ) : (
         <View
@@ -134,7 +199,8 @@ export default function Avatar({ url, size = 150, onUpload }: Props) {
       <View>
         <Button
           title={uploading ? 'Uploading ...' : 'Upload'}
-          onPress={uploadAvatar}
+          onPress={onSelectImage}
+          // onPress={uploadAvatar}
           disabled={uploading}
           color={theme.colors.primary}
         />
