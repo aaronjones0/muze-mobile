@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
-import { supabase } from '../../../lib/supabase';
-import { StyleSheet, View, Alert, TextInput, Button } from 'react-native';
-import { Session } from '@supabase/supabase-js';
 import { useTheme } from '@shopify/restyle';
+import { Session } from '@supabase/supabase-js';
+import { useEffect, useState } from 'react';
+import { Button, StyleSheet, TextInput, View } from 'react-native';
+import { supabase } from '../../../lib/supabase';
 import { Theme } from '../../theme/theme';
+import Avatar from '../Avatar/Avatar';
 import Box from '../Box/Box';
 import Text from '../Text/Text';
-import Avatar from '../Avatar/Avatar';
+import { getProfile, updateProfile } from './AccountLogic';
 
 export default function Account({
   session,
@@ -22,76 +23,11 @@ export default function Account({
 
   const theme = useTheme<Theme>();
   const colors = theme.colors;
-  const spacing = theme.spacing;
 
   useEffect(() => {
-    if (session) getProfile();
+    if (session)
+      getProfile(session, setLoading, setUsername, setWebsite, setAvatarUrl);
   }, [session]);
-
-  async function getProfile() {
-    try {
-      setLoading(true);
-      if (!session?.user) throw new Error('No user on the session!');
-
-      let { data, error, status } = await supabase
-        .from('profiles')
-        .select(`username, website, avatar_url`)
-        .eq('id', session?.user.id)
-        .single();
-      if (error && status !== 406) {
-        throw error;
-      }
-
-      if (data) {
-        console.log('data.username: ' + data.username);
-        setUsername(data.username);
-        setWebsite(data.website);
-        console.log('data.avatar_url: ' + data.avatar_url);
-        setAvatarUrl(data.avatar_url);
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        Alert.alert(error.message);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function updateProfile({
-    username,
-    website,
-    avatar_url,
-  }: {
-    username: string;
-    website: string;
-    avatar_url: string;
-  }) {
-    try {
-      setLoading(true);
-      if (!session?.user) throw new Error('No user on the session!');
-
-      const updates = {
-        id: session?.user.id,
-        username,
-        website,
-        avatar_url,
-        updated_at: new Date(),
-      };
-
-      let { error } = await supabase.from('profiles').upsert(updates);
-
-      if (error) {
-        throw error;
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        Alert.alert(error.message);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }
 
   return (
     <Box
@@ -132,11 +68,15 @@ export default function Account({
                 console.log(`setAvatarUrl(${url})`);
                 setAvatarUrl(url);
                 console.log(`updateProfile({${username}, ${website}, ${url}})`);
-                updateProfile({
-                  username: username,
-                  website: website,
-                  avatar_url: url,
-                });
+                updateProfile(
+                  {
+                    username: username,
+                    website: website,
+                    avatar_url: url,
+                  },
+                  session,
+                  setLoading
+                );
               }}
             />
           </Box>
@@ -159,7 +99,11 @@ export default function Account({
           <Button
             title={loading ? 'Loading ...' : 'Update'}
             onPress={() =>
-              updateProfile({ username, website, avatar_url: avatarUrl })
+              updateProfile(
+                { username, website, avatar_url: avatarUrl },
+                session,
+                setLoading
+              )
             }
             color={colors.primary}
             disabled={loading}
