@@ -27,8 +27,12 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [initialized, setInitialized] = useState<boolean>(false);
 
   useEffect(() => {
+    console.log('In AuthProvider useEffect.');
     // Listen for changes to authentication state
     const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('onAuthStateChange()');
+      console.log('Session? ' + !!session);
+      console.log('Session User? ' + !!session.user);
       setSession(session);
       setUser(session ? session.user : null);
       setInitialized(true);

@@ -5,11 +5,12 @@ import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 
 // Image item component that displays the image from Supabase Storage and a delte button
-const ImageItem = ({
+const ImageBox = ({
   item,
   userId,
   onRemoveImage,
 }: {
+  // url: string | null;
   item: FileObject;
   userId: string;
   onRemoveImage: () => void;
@@ -31,7 +32,7 @@ const ImageItem = ({
     <View
       style={{ flexDirection: 'row', margin: 1, alignItems: 'center', gap: 5 }}
     >
-      {image ? (
+      {!!image ? (
         <Image style={{ width: 80, height: 80 }} source={{ uri: image }} />
       ) : (
         <View style={{ width: 80, height: 80, backgroundColor: '#1A1A1A' }} />
@@ -45,4 +46,4 @@ const ImageItem = ({
   );
 };
 
-export default ImageItem;
+export default ImageBox;

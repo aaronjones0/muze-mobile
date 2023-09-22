@@ -43,8 +43,10 @@ export default function Account({
       }
 
       if (data) {
+        console.log('data.username: ' + data.username);
         setUsername(data.username);
         setWebsite(data.website);
+        console.log('data.avatar_url: ' + data.avatar_url);
         setAvatarUrl(data.avatar_url);
       }
     } catch (error) {
@@ -127,8 +129,14 @@ export default function Account({
               url={avatarUrl}
               size={150}
               onUpload={(url: string) => {
+                console.log(`setAvatarUrl(${url})`);
                 setAvatarUrl(url);
-                updateProfile({ username, website, avatar_url: url });
+                console.log(`updateProfile({${username}, ${website}, ${url}})`);
+                updateProfile({
+                  username: username,
+                  website: website,
+                  avatar_url: url,
+                });
               }}
             />
           </Box>
