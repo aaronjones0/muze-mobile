@@ -1,33 +1,11 @@
 import React, { useState } from 'react';
-import { Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
-import { supabase } from '../../../lib/supabase';
+import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { signInWithEmail, signUpWithEmail } from './AuthLogic';
 
 export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-
-  async function signInWithEmail() {
-    setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
-
-    if (error) Alert.alert(error.message);
-    setLoading(false);
-  }
-
-  async function signUpWithEmail() {
-    setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-    });
-
-    if (error) Alert.alert(error.message);
-    setLoading(false);
-  }
 
   return (
     <View style={styles.container}>
@@ -54,14 +32,14 @@ export default function Auth() {
         <Button
           title='Sign in'
           disabled={loading}
-          onPress={() => signInWithEmail()}
+          onPress={() => signInWithEmail(email, password, setLoading)}
         />
       </View>
       <View style={styles.verticallySpaced}>
         <Button
           title='Sign up'
           disabled={loading}
-          onPress={() => signUpWithEmail()}
+          onPress={() => signUpWithEmail(email, password, setLoading)}
         />
       </View>
     </View>
