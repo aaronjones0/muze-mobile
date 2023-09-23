@@ -1,13 +1,12 @@
 import { useTheme } from '@shopify/restyle';
 import { FileObject } from '@supabase/storage-js';
 import { useEffect, useState } from 'react';
-import { Button, Image, StyleSheet, View } from 'react-native';
+import { Button, Image, View } from 'react-native';
 import { useAuth } from '../../../lib/providers/AuthProvider';
 import { supabase } from '../../../lib/supabase';
 import Box from '../Box/Box';
-import { loadAvatar, onSelectImage } from './AvatarLogic';
-import ImageBox from '../ImageBox/ImageBox';
 import Text from '../Text/Text';
+import { onSelectImage } from './AvatarLogic';
 
 export interface AvatarProps {
   size: number;
@@ -20,35 +19,42 @@ export default function Avatar({ size = 150 }: AvatarProps) {
   const [avatar, setAvatar] = useState<FileObject | null>(null);
   const [uploading, setUploading] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-  const [avatarUri, setAvatarUri] = useState<string | null>(null);
+  const [avatarName, setAvatarName] = useState<string | null>(null);
 
   const avatarSize = { height: size, width: size };
 
-  useEffect(() => {
-    if (!user || !avatarUrl) return;
+  // useEffect(() => {
+  //   if (!user || !avatarUrl) return;
 
-    // Load user avatar
-    loadAvatar(avatarUrl, setAvatar);
-    // loadAvatar(user.id, setAvatar);
-  }, [user, avatarUrl]);
+  //   // Load user avatar
+  //   loadAvatar(avatarUrl, setAvatar);
+  //   // loadAvatar(user.id, setAvatar);
+  // }, [user, avatarUrl]);
 
   useEffect(() => {
     if (!user) return;
     // if (!user || !avatar) return;
 
-    supabase.storage
-      .from('avatars')
-      .download(`${user.id}/avatar.png`)
-      .then(({ data }) => {
-        const fr = new FileReader();
-        fr.readAsDataURL(data);
-        fr.onload = () => {
-          console.log('fr.result as string: ', fr.result as string);
-          setAvatarUrl(fr.result as string);
-          setAvatarUri(fr.result as string);
-        };
-      });
-  }, [user]);
+    try {
+      supabase.storage
+        .from('avatars')
+        .download(`${user.id}/${avatarName}`)
+        .then(({ data }) => {
+          if (!data) {
+            console.log('No avatar.');
+            return;
+          }
+
+          const fr = new FileReader();
+          fr.readAsDataURL(data);
+          fr.onload = () => {
+            setAvatarUrl(fr.result as string);
+          };
+        });
+    } catch (error) {
+      console.error(error);
+    }
+  }, [user, avatarUrl, avatarName]);
 
   return (
     <Box
@@ -74,10 +80,11 @@ export default function Avatar({ size = 150 }: AvatarProps) {
               {
                 borderRadius: 24,
                 overflow: 'hidden',
-                borderColor: theme.colors.borderColor,
+                borderColor: theme.colors.backgroundSurfaceBorder,
                 borderWidth: 1,
               },
             ]}
+            alt='User Avatar Image'
           />
         </Box>
       ) : (
@@ -99,13 +106,36 @@ export default function Avatar({ size = 150 }: AvatarProps) {
           alignItems='center'
           justifyContent='center'
         >
-          <Text variant='label'>{avatarUrl}</Text>
+          <Text variant='label'>(None)</Text>
         </Box>
       )}
       <View>
         <Button
           title={uploading ? 'Uploading ...' : 'Upload'}
-          onPress={() => onSelectImage(user.id, setAvatar)}
+          onPress={() => {
+            onSelectImage(user.id, setAvatarName);
+          }}
+          disabled={uploading}
+          color={theme.colors.primary}
+        />
+      </View>
+      <View>
+        <Button
+          title={'Remove'}
+          onPress={() => {
+            try {
+              const result = supabase.storage
+                .from('avatars')
+                .remove([`${user.id}/${avatarName}`]);
+              console.log('result: ' + result);
+              setAvatarUrl(null);
+            } catch (error) {
+              console.error(
+                'An error occurred while trying to delete your avatar.'
+              );
+              console.error(error);
+            }
+          }}
           disabled={uploading}
           color={theme.colors.primary}
         />

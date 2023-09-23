@@ -21,7 +21,8 @@ export const loadAvatar = async (
 
 export const onSelectImage = async (
   userId: string,
-  setAvatar: Dispatch<SetStateAction<FileObject | null>>
+  setAvatarName: Dispatch<SetStateAction<string | null>>
+  // setAvatar: Dispatch<SetStateAction<FileObject | null>>
 ) => {
   const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -42,7 +43,8 @@ export const onSelectImage = async (
     const base64 = await readAsStringAsync(img.uri, {
       encoding: 'base64',
     });
-    const filePath = `${userId}/avatar.${img.type === 'image' ? 'png' : 'mp4'}`;
+    const fileName = `${new Date().getTime()}.${img.type === 'image' ? 'png' : 'mp4'}`;
+    const filePath = `${userId}/${fileName}`;
     // const filePath = `${userId}/${new Date().getTime()}.${
     //   img.type === 'image' ? 'png' : 'mp4'
     // }`;
@@ -54,8 +56,9 @@ export const onSelectImage = async (
       .upload(filePath, decode(base64), { contentType });
     console.log('uploadResult: ', uploadResult);
 
-    updateProfileAvatar(userId, filePath);
-    loadAvatar(userId, setAvatar);
+    updateProfileAvatar(userId, fileName);
+    setAvatarName(fileName);
+    // loadAvatar(userId, setAvatar);
   }
 };
 
