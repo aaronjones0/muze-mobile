@@ -18,9 +18,11 @@ const ImageBox = ({
   const [image, setImage] = useState<string>('');
 
   supabase.storage
-    .from('files')
+    .from('avatars')
     .download(`${userId}/${item.name}`)
     .then(({ data }) => {
+      console.debug('userId: ', userId);
+      console.debug('item: ', item);
       const fr = new FileReader();
       fr.readAsDataURL(data!);
       fr.onload = () => {

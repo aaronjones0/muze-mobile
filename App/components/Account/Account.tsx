@@ -61,24 +61,7 @@ export default function Account({
         </Text>
         <View style={[styles.verticallySpaced, styles.mt20]}>
           <Box height={200}>
-            <Avatar
-              url={avatarUrl}
-              size={150}
-              onUpload={(url: string) => {
-                console.log(`setAvatarUrl(${url})`);
-                setAvatarUrl(url);
-                console.log(`updateProfile({${username}, ${website}, ${url}})`);
-                updateProfile(
-                  {
-                    username: username,
-                    website: website,
-                    avatar_url: url,
-                  },
-                  session,
-                  setLoading
-                );
-              }}
-            />
+            <Avatar size={150} />
           </Box>
           <Text variant='label'>Email</Text>
           <TextInput
@@ -92,19 +75,19 @@ export default function Account({
           <TextInput
             value={username || ''}
             onChangeText={(text) => setUsername(text)}
-            style={{ fontSize: 16, color: colors.text2 }}
+            style={{ fontSize: 16, fontWeight: '500', color: colors.text1 }}
           />
         </View>
         <View style={[styles.verticallySpaced, styles.mt20]}>
           <Button
             title={loading ? 'Loading ...' : 'Update'}
-            onPress={() =>
+            onPress={() => {
               updateProfile(
                 { username, website, avatar_url: avatarUrl },
                 session,
                 setLoading
-              )
-            }
+              );
+            }}
             color={colors.primary}
             disabled={loading}
           />

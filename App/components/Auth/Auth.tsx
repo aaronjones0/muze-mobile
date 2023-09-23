@@ -1,35 +1,43 @@
 import React, { useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, StyleSheet, TextInput, View } from 'react-native';
 import { signInWithEmail, signUpWithEmail } from './AuthLogic';
+import Text from '../Text/Text';
+import { useTheme } from '@shopify/restyle';
 
 export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const theme = useTheme();
+  const colors = theme.colors;
+
   return (
     <View style={styles.container}>
       <View style={[styles.verticallySpaced, styles.mt20]}>
-        <Text>Email</Text>
+        <Text variant='label'>Email</Text>
         <TextInput
           onChangeText={(text) => setEmail(text)}
           value={email}
           placeholder='email@address.com'
           autoCapitalize={'none'}
+          style={{ fontSize: 16, fontWeight: '500', color: colors.text1 }}
         />
       </View>
       <View style={styles.verticallySpaced}>
-        <Text>Password</Text>
+        <Text variant='label'>Password</Text>
         <TextInput
           onChangeText={(text) => setPassword(text)}
           value={password}
           secureTextEntry={true}
           placeholder='Password'
           autoCapitalize={'none'}
+          style={{ fontSize: 16, fontWeight: '500', color: colors.text1 }}
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <Button
+          color={theme.colors.primary}
           title='Sign in'
           disabled={loading}
           onPress={() => signInWithEmail(email, password, setLoading)}
@@ -37,6 +45,7 @@ export default function Auth() {
       </View>
       <View style={styles.verticallySpaced}>
         <Button
+          color={theme.colors.primary}
           title='Sign up'
           disabled={loading}
           onPress={() => signUpWithEmail(email, password, setLoading)}

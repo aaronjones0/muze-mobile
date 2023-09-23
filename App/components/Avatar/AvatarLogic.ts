@@ -4,12 +4,15 @@ import { readAsStringAsync } from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import { Dispatch, SetStateAction } from 'react';
 import { supabase } from '../../../lib/supabase';
+import { Alert } from 'react-native';
 
 export const loadAvatar = async (
-  userId: string,
+  avatarUrl: string,
   setAvatar: Dispatch<SetStateAction<FileObject | null>>
 ) => {
-  const { data } = await supabase.storage.from('avatars').list(userId);
+  const { data } = await supabase.storage
+    .from('avatars')
+    .download(`${avatarUrl}`);
   if (data) {
     console.log(data);
     setAvatar(data[0]);
@@ -39,13 +42,41 @@ export const onSelectImage = async (
     const base64 = await readAsStringAsync(img.uri, {
       encoding: 'base64',
     });
-    const filePath = `${userId}/${new Date().getTime()}.${
-      img.type === 'image' ? 'png' : 'mp4'
-    }`;
+    const filePath = `${userId}/avatar.${img.type === 'image' ? 'png' : 'mp4'}`;
+    // const filePath = `${userId}/${new Date().getTime()}.${
+    //   img.type === 'image' ? 'png' : 'mp4'
+    // }`;
     const contentType = img.type === 'image' ? 'image/png' : 'video/mp4';
-    await supabase.storage
+
+    console.log(filePath);
+    const uploadResult = await supabase.storage
       .from('avatars')
       .upload(filePath, decode(base64), { contentType });
+    console.log('uploadResult: ', uploadResult);
+
+    updateProfileAvatar(userId, filePath);
     loadAvatar(userId, setAvatar);
   }
 };
+
+async function updateProfileAvatar(userId: string, avatarUrl: string) {
+  console.log('Updating profile from Avatar.');
+  console.log(`avatarUrl: ${avatarUrl}`);
+  try {
+    const updates = {
+      id: userId,
+      avatarUrl,
+      updated_at: new Date(),
+    };
+
+    let { error } = await supabase.from('profiles').upsert(updates);
+
+    if (error) {
+      throw error;
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      Alert.alert(error.message);
+    }
+  }
+}
