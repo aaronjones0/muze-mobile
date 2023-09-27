@@ -23,17 +23,8 @@ export default function Avatar({ size = 150 }: AvatarProps) {
 
   const avatarSize = { height: size, width: size };
 
-  // useEffect(() => {
-  //   if (!user || !avatarUrl) return;
-
-  //   // Load user avatar
-  //   loadAvatar(avatarUrl, setAvatar);
-  //   // loadAvatar(user.id, setAvatar);
-  // }, [user, avatarUrl]);
-
   useEffect(() => {
     if (!user) return;
-    // if (!user || !avatar) return;
 
     try {
       supabase.storage

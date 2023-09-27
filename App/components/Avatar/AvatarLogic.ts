@@ -22,7 +22,6 @@ export const loadAvatar = async (
 export const onSelectImage = async (
   userId: string,
   setAvatarName: Dispatch<SetStateAction<string | null>>
-  // setAvatar: Dispatch<SetStateAction<FileObject | null>>
 ) => {
   const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -58,7 +57,6 @@ export const onSelectImage = async (
 
     updateProfileAvatar(userId, fileName);
     setAvatarName(fileName);
-    // loadAvatar(userId, setAvatar);
   }
 };
 
@@ -68,7 +66,7 @@ async function updateProfileAvatar(userId: string, avatarUrl: string) {
   try {
     const updates = {
       id: userId,
-      avatarUrl,
+      avatar_url: avatarUrl,
       updated_at: new Date(),
     };
 
