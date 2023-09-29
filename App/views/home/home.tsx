@@ -52,8 +52,8 @@ export default function Home({ navigation }) {
           flexGrow={1}
         >
           <Button
-            title='Account'
-            onPress={() => navigation.navigate('Account')}
+            title='Profile'
+            onPress={() => navigation.navigate('Profile')}
             color={theme.colors.primary}
           />
         </Box>

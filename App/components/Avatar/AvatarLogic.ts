@@ -42,20 +42,54 @@ export const onSelectImage = async (
     const base64 = await readAsStringAsync(img.uri, {
       encoding: 'base64',
     });
-    const fileName = `${new Date().getTime()}.${img.type === 'image' ? 'png' : 'mp4'}`;
+    const fileName = `${new Date().getTime()}.${
+      img.type === 'image' ? 'png' : 'mp4'
+    }`;
     const filePath = `${userId}/${fileName}`;
-    // const filePath = `${userId}/${new Date().getTime()}.${
-    //   img.type === 'image' ? 'png' : 'mp4'
-    // }`;
     const contentType = img.type === 'image' ? 'image/png' : 'video/mp4';
 
-    console.log(filePath);
-    const uploadResult = await supabase.storage
-      .from('avatars')
-      .upload(filePath, decode(base64), { contentType });
-    console.log('uploadResult: ', uploadResult);
+    try {
+      const uploadResult = await supabase.storage
+        .from('avatars')
+        .upload(filePath, decode(base64), { contentType });
+      console.log('uploadResult: ', uploadResult);
+    } catch (error) {
+      if (error instanceof Error) {
+        Alert.alert('An error occurred during file upload: ' + error.message);
+      } else {
+        console.error('Unable to upload avatar.');
+        throw error;
+      }
+    }
 
-    updateProfileAvatar(userId, fileName);
+    try {
+      // const updates = {
+      //   id: userId,
+      //   avatar_url: fileName,
+      //   updated_at: new Date(),
+      // };
+
+      let { error } = await supabase
+        .from('profiles')
+        .update({ avatar_url: fileName })
+        .eq('id', userId);
+      // let { error } = await supabase.from('profiles').upsert(updates);
+
+      if (error) {
+        throw error;
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        Alert.alert(
+          'An error occurred during profile update: ' + error.message
+        );
+      } else {
+        console.error('Unable to update avatar_url on profile.');
+        throw error;
+      }
+    }
+
+    // await updateProfileAvatar(userId, fileName);
     setAvatarName(fileName);
   }
 };
@@ -78,6 +112,8 @@ async function updateProfileAvatar(userId: string, avatarUrl: string) {
   } catch (error) {
     if (error instanceof Error) {
       Alert.alert(error.message);
+    } else {
+      throw error;
     }
   }
 }

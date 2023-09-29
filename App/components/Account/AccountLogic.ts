@@ -53,7 +53,7 @@ export async function updateProfile(
   setLoading: Dispatch<SetStateAction<boolean>>
 ) {
   console.log('Updating profile from Account.');
-  console.log(`avatar_url: ${avatar_url}`);
+  // console.log(`avatar_url: ${avatar_url}`);
   try {
     setLoading(true);
     if (!session?.user) throw new Error('No user on the session!');

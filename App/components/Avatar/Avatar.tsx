@@ -10,9 +10,10 @@ import { onSelectImage } from './AvatarLogic';
 
 export interface AvatarProps {
   size: number;
+  onAvatarChanged: (avatarUrl: string) => void;
 }
 
-export default function Avatar({ size = 150 }: AvatarProps) {
+export default function Avatar({ size = 150, onAvatarChanged }: AvatarProps) {
   const { user } = useAuth();
   const theme = useTheme();
 
@@ -39,7 +40,9 @@ export default function Avatar({ size = 150 }: AvatarProps) {
           const fr = new FileReader();
           fr.readAsDataURL(data);
           fr.onload = () => {
-            setAvatarUrl(fr.result as string);
+            const url = fr.result as string;
+            setAvatarUrl(url);
+            onAvatarChanged(url);
           };
         });
     } catch (error) {

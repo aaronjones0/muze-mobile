@@ -12,6 +12,7 @@ import Box from './components/Box/Box';
 import theme from './theme/theme';
 import Collection from './views/collection/collection';
 import Home from './views/home/home';
+import Test from './views/test';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -53,7 +54,9 @@ export default function App() {
                   },
                 }}
               >
-                <Stack.Screen name='Account'>
+                <Stack.Screen name='Home' component={Home} />
+                <Stack.Screen name='Test' component={Test} />
+                <Stack.Screen name='Profile'>
                   {(props) => (
                     <Account
                       {...props}
@@ -62,7 +65,6 @@ export default function App() {
                     />
                   )}
                 </Stack.Screen>
-                <Stack.Screen name='Home' component={Home} />
                 <Stack.Screen name='Collection' component={Collection} />
               </Stack.Navigator>
             ) : (
