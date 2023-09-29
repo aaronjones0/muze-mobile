@@ -161,6 +161,11 @@ const theme = createTheme({
       fontWeight: 900,
       color: 'text2',
     },
+    h2: {
+      fontSize: 24,
+      fontWeight: 900,
+      color: 'text2',
+    },
     body: {
       fontSize: 16,
       color: 'text1',

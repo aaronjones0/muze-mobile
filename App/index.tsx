@@ -13,6 +13,7 @@ import theme from './theme/theme';
 import Collection from './views/collection/collection';
 import Home from './views/home/home';
 import Test from './views/test';
+import TVSeriesCollection from './views/TVSeriesCollection/TVSeriesCollection';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -55,6 +56,10 @@ export default function App() {
                 }}
               >
                 <Stack.Screen name='Home' component={Home} />
+                <Stack.Screen
+                  name={`TV Series'`}
+                  component={TVSeriesCollection}
+                />
                 <Stack.Screen name='Test' component={Test} />
                 <Stack.Screen name='Profile'>
                   {(props) => (
