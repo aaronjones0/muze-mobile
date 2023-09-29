@@ -111,7 +111,10 @@ export default function Account({
         flexDirection='column'
         gap='s5'
       >
-        <Text variant='h1'>Profile</Text>
+        {/* <Text variant='h1' textAlign='center'>Profile</Text> */}
+        <Text variant='h1' textAlign='center'>
+          {username}
+        </Text>
         <Box flex={1} flexDirection='column' gap='s6'>
           <Box
             alignSelf='center'
@@ -151,6 +154,11 @@ export default function Account({
             borderWidth={1}
             borderColor='primarySurfaceBorder'
             borderRadius={16}
+            backgroundColor='cardSurface'
+            shadowColor='shadowColor'
+            shadowOffset={{ width: 0, height: 6 }}
+            shadowOpacity={0.8}
+            shadowRadius={12}
           >
             <Text color='text2'>Username</Text>
             <TextInput
@@ -159,6 +167,20 @@ export default function Account({
               style={{ color: colors.text1, fontSize: 16 }}
             />
           </Box>
+        </Box>
+        <Box
+          backgroundColor='primarySurface'
+          borderColor='primarySurfaceBorder'
+          borderLeftWidth={1}
+          borderTopWidth={1}
+          borderRightWidth={1}
+          borderRadius={24}
+          shadowColor='shadowColor'
+          shadowOffset={{ width: 0, height: 6 }}
+          shadowRadius={6}
+          shadowOpacity={0.8}
+        >
+          <Button title='Edit' onPress={() => {}} color={theme.colors.text2} />
         </Box>
       </Box>
       <Box
