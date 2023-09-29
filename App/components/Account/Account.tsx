@@ -6,6 +6,9 @@ import Box from '../Box/Box';
 import Text from '../Text/Text';
 import { useEffect, useState } from 'react';
 import { supabase } from '../../../lib/supabase';
+import * as ImagePicker from 'expo-image-picker';
+import { readAsStringAsync } from 'expo-file-system';
+import { decode } from 'base64-arraybuffer';
 
 export default function Account({
   session,
@@ -108,6 +111,114 @@ export default function Account({
     }
   }
 
+  const onChangeAvatar = async () => {
+    // Save current avatar file name:
+    const oldAvatarFileName = avatarFileName;
+
+    // Get permission:
+    const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!granted) {
+      return;
+    }
+
+    // Limit to images:
+    const options: ImagePicker.ImagePickerOptions = {
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+    };
+
+    // Open image picker:
+    const result = await ImagePicker.launchImageLibraryAsync(options);
+
+    // Save image if not cancelled:
+    if (!result.canceled) {
+      const img = result.assets[0];
+      const base64 = await readAsStringAsync(img.uri, {
+        encoding: 'base64',
+      });
+
+      // Generate file name:
+      const fileName = `${new Date().getTime()}.${
+        img.type === 'image' ? 'png' : 'mp4'
+      }`;
+
+      // Build file path and get content type:
+      const filePath = `${session.user.id}/${fileName}`;
+      const contentType = img.type === 'image' ? 'image/png' : 'video/mp4';
+
+      // Upload the new avatar to storage:
+      try {
+        await supabase.storage
+          .from('avatars')
+          .upload(filePath, decode(base64), { contentType });
+      } catch (error) {
+        if (error instanceof Error) {
+          Alert.alert('An error occurred during file upload: ' + error.message);
+        } else {
+          console.error('Unable to upload avatar.');
+          throw error;
+        }
+      }
+
+      // Delete the old avatar from storage:
+      supabase.storage
+        .from('avatars')
+        .remove([`${session.user.id}/${oldAvatarFileName}`]);
+
+      // Update the user's avatar file name on their profile:
+      try {
+        let { error } = await supabase
+          .from('profiles')
+          .update({ avatar_url: fileName })
+          .eq('id', session.user.id);
+
+        if (error) {
+          throw error;
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          Alert.alert(
+            'An error occurred during profile update: ' + error.message
+          );
+        } else {
+          console.error('Unable to update avatar_url on profile.');
+          throw error;
+        }
+      }
+
+      // Update state:
+      setAvatarFileName(fileName);
+    }
+  };
+
+  const onRemoveAvatar = async () => {
+    try {
+      setLoading(true);
+
+      supabase.storage
+        .from('avatars')
+        .remove([`${session.user.id}/${avatarFileName}`]);
+
+      const updates = {
+        id: session.user.id,
+        avatar_url: null,
+      };
+
+      const { error } = await supabase.from('profiles').upsert(updates);
+
+      if (!!error) {
+        throw error;
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        Alert.alert(error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Box
       backgroundColor='backgroundSurface'
@@ -143,28 +254,77 @@ export default function Account({
         </Text>
         <Box flex={1} flexDirection='column' gap='s6'>
           <Box
-            width={avatarSize}
+            width={!editingProfile ? avatarSize : '100%'}
             height={avatarSize}
-            alignSelf='center'
-            shadowColor='shadowColor'
-            shadowOffset={{ width: 0, height: 6 }}
-            shadowOpacity={1}
-            shadowRadius={12}
+            alignSelf={!editingProfile ? 'center' : undefined}
+            flexDirection='row'
+            gap='s2'
           >
             {!loading ? (
-              <Image
-                style={{
-                  width: avatarSize,
-                  height: avatarSize,
-                  borderRadius: 16,
-                  borderWidth: 2,
-                  borderColor: colors.shadowColor,
-                }}
-                source={{ uri: avatarUrl }}
-              />
+              <Box
+                shadowColor='shadowColor'
+                shadowOffset={{ width: 0, height: 6 }}
+                shadowOpacity={0.8}
+                shadowRadius={6}
+              >
+                <Image
+                  style={{
+                    width: avatarSize,
+                    height: avatarSize,
+                    borderRadius: 16,
+                    borderWidth: 2,
+                    borderColor: colors.shadowColor,
+                  }}
+                  source={{ uri: avatarUrl }}
+                />
+              </Box>
             ) : (
               <Text variant='body'>Loading...</Text>
             )}
+            {editingProfile ? (
+              <Box flexDirection='column' gap='s2' flexGrow={1}>
+                <Box
+                  backgroundColor='primarySurface'
+                  borderColor='primarySurfaceBorder'
+                  borderLeftWidth={1}
+                  borderTopWidth={1}
+                  borderRightWidth={1}
+                  borderRadius={24}
+                  shadowColor='shadowColor'
+                  shadowOffset={{ width: 0, height: 6 }}
+                  shadowRadius={6}
+                  shadowOpacity={0.8}
+                  flexGrow={1}
+                  justifyContent='center'
+                >
+                  <Button
+                    title='Change'
+                    onPress={() => onChangeAvatar()}
+                    color={theme.colors.text2}
+                  />
+                </Box>
+                <Box
+                  backgroundColor='primarySurface'
+                  borderColor='primarySurfaceBorder'
+                  borderLeftWidth={1}
+                  borderTopWidth={1}
+                  borderRightWidth={1}
+                  borderRadius={24}
+                  shadowColor='shadowColor'
+                  shadowOffset={{ width: 0, height: 6 }}
+                  shadowRadius={6}
+                  shadowOpacity={0.8}
+                  flexGrow={1}
+                  justifyContent='center'
+                >
+                  <Button
+                    title='Remove'
+                    onPress={() => onRemoveAvatar()}
+                    color={theme.colors.text2}
+                  />
+                </Box>
+              </Box>
+            ) : null}
           </Box>
           <Box
             paddingVertical='s4'
