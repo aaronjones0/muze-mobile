@@ -14,6 +14,8 @@ export default function Account({
   session: Session;
   navigation: any;
 }) {
+  const avatarSize = 150;
+
   const theme = useTheme<Theme>();
   const colors = theme.colors;
 
@@ -21,6 +23,7 @@ export default function Account({
   const [username, setUsername] = useState('');
   const [avatarFileName, setAvatarFileName] = useState('');
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [editingProfile, setEditingProfile] = useState(false);
 
   useEffect(() => {
     if (session) getProfile();
@@ -81,6 +84,30 @@ export default function Account({
     }
   }
 
+  async function updateProfile(username: string, avatarFileName: string) {
+    try {
+      setLoading(true);
+
+      const updates = {
+        id: session.user.id,
+        username: username,
+        avatar_url: avatarFileName,
+      };
+
+      const { error } = await supabase.from('profiles').upsert(updates);
+
+      if (!!error) {
+        throw error;
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        Alert.alert(error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <Box
       backgroundColor='backgroundSurface'
@@ -111,28 +138,33 @@ export default function Account({
         flexDirection='column'
         gap='s5'
       >
-        {/* <Text variant='h1' textAlign='center'>Profile</Text> */}
         <Text variant='h1' textAlign='center'>
           {username}
         </Text>
         <Box flex={1} flexDirection='column' gap='s6'>
           <Box
+            width={avatarSize}
+            height={avatarSize}
             alignSelf='center'
             shadowColor='shadowColor'
             shadowOffset={{ width: 0, height: 6 }}
             shadowOpacity={1}
             shadowRadius={12}
           >
-            <Image
-              style={{
-                width: 150,
-                height: 150,
-                borderRadius: 16,
-                borderWidth: 2,
-                borderColor: colors.shadowColor,
-              }}
-              source={{ uri: avatarUrl }}
-            />
+            {!loading ? (
+              <Image
+                style={{
+                  width: avatarSize,
+                  height: avatarSize,
+                  borderRadius: 16,
+                  borderWidth: 2,
+                  borderColor: colors.shadowColor,
+                }}
+                source={{ uri: avatarUrl }}
+              />
+            ) : (
+              <Text variant='body'>Loading...</Text>
+            )}
           </Box>
           <Box
             paddingVertical='s4'
@@ -154,33 +186,84 @@ export default function Account({
             borderWidth={1}
             borderColor='primarySurfaceBorder'
             borderRadius={16}
-            backgroundColor='cardSurface'
-            shadowColor='shadowColor'
-            shadowOffset={{ width: 0, height: 6 }}
-            shadowOpacity={0.8}
-            shadowRadius={12}
+            backgroundColor={
+              !editingProfile ? 'primarySurface' : 'backgroundSurface'
+            }
           >
             <Text color='text2'>Username</Text>
             <TextInput
               value={username}
-              editable={false}
+              onChangeText={(text) => setUsername(text)}
+              editable={editingProfile}
               style={{ color: colors.text1, fontSize: 16 }}
             />
           </Box>
         </Box>
-        <Box
-          backgroundColor='primarySurface'
-          borderColor='primarySurfaceBorder'
-          borderLeftWidth={1}
-          borderTopWidth={1}
-          borderRightWidth={1}
-          borderRadius={24}
-          shadowColor='shadowColor'
-          shadowOffset={{ width: 0, height: 6 }}
-          shadowRadius={6}
-          shadowOpacity={0.8}
-        >
-          <Button title='Edit' onPress={() => {}} color={theme.colors.text2} />
+        <Box>
+          {!editingProfile ? (
+            <Box
+              backgroundColor='primarySurface'
+              borderColor='primarySurfaceBorder'
+              borderLeftWidth={1}
+              borderTopWidth={1}
+              borderRightWidth={1}
+              borderRadius={24}
+              shadowColor='shadowColor'
+              shadowOffset={{ width: 0, height: 6 }}
+              shadowRadius={6}
+              shadowOpacity={0.8}
+            >
+              <Button
+                title='Edit'
+                onPress={() => setEditingProfile(true)}
+                color={theme.colors.text2}
+              />
+            </Box>
+          ) : (
+            <Box flexDirection='row' width='100%' gap='s10'>
+              <Box
+                backgroundColor='primarySurface'
+                borderColor='primarySurfaceBorder'
+                borderLeftWidth={1}
+                borderTopWidth={1}
+                borderRightWidth={1}
+                borderRadius={24}
+                shadowColor='shadowColor'
+                shadowOffset={{ width: 0, height: 6 }}
+                shadowRadius={6}
+                shadowOpacity={0.8}
+                flexGrow={1}
+              >
+                <Button
+                  title='Save'
+                  onPress={() => {
+                    setEditingProfile(false);
+                    updateProfile(username, avatarFileName);
+                  }}
+                  color={theme.colors.text2}
+                />
+              </Box>
+              <Box
+                backgroundColor='primarySurface'
+                borderColor='primarySurfaceBorder'
+                borderLeftWidth={1}
+                borderTopWidth={1}
+                borderRightWidth={1}
+                borderRadius={24}
+                shadowColor='shadowColor'
+                shadowOffset={{ width: 0, height: 6 }}
+                shadowRadius={6}
+                shadowOpacity={0.8}
+                flexGrow={1}
+              >
+                <Button
+                  title='Cancel'
+                  onPress={() => setEditingProfile(false)}
+                  color={theme.colors.text2}
+                />
+              </Box>
+            </Box>
+          )}
         </Box>
       </Box>
       <Box
