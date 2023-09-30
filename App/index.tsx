@@ -15,6 +15,7 @@ import Home from './views/home/home';
 import Test from './views/test';
 import TVSeriesCollection from './views/TVSeriesCollection/TVSeriesCollection';
 import TVSeriesAdd from './views/TVSeriesAdd/TVSeriesAdd';
+import TVSeriesDetail from './views/TVSeriesDetail/TVSeriesDetail';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -60,6 +61,10 @@ export default function App() {
                 <Stack.Screen
                   name={`TV Series'`}
                   component={TVSeriesCollection}
+                />
+                <Stack.Screen
+                  name={'TV Series Detail'}
+                  component={TVSeriesDetail}
                 />
                 <Stack.Screen name={'Add TV Series'} component={TVSeriesAdd} />
                 <Stack.Screen name='Test' component={Test} />

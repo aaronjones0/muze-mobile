@@ -1,4 +1,4 @@
-import { Alert, ScrollView } from 'react-native';
+import { Alert, Pressable, ScrollView } from 'react-native';
 import Box from '../../components/Box/Box';
 import Text from '../../components/Text/Text';
 import { useEffect, useState } from 'react';
@@ -47,34 +47,40 @@ export default function TVSeriesCollection({ navigation }) {
       {!!tvSeries ? (
         <ScrollView style={{ padding: 24 }}>
           {tvSeries.map((item, index) => (
-            <Box
-              key={item.id}
-              backgroundColor='backgroundSurface'
-              borderColor='backgroundSurfaceBorder'
-              borderTopWidth={1}
-              borderLeftWidth={1}
-              borderRightWidth={1}
-              borderRadius={24}
-              padding='s8'
-              shadowColor='shadowColor'
-              shadowOffset={{ width: 0, height: 8 }}
-              shadowOpacity={0.8}
-              shadowRadius={16}
-              marginBottom='s8'
+            <Pressable
+              onPress={() =>
+                navigation.navigate('TV Series Detail', { tvSeriesId: item.id })
+              }
             >
-              <Text variant='h2'>{item.full_title}</Text>
-              <Text variant='label'>{item.content_rating}</Text>
-              <Box flexDirection='row' justifyContent='space-between'>
-                <Box flexDirection='row'>
-                  <Text variant='label'>Seasons: </Text>
-                  <Text variant='body'>{item.season_count}</Text>
-                </Box>
-                <Box flexDirection='row'>
-                  <Text variant='label'>Episodes: </Text>
-                  <Text variant='body'>{item.episode_count}</Text>
+              <Box
+                key={item.id}
+                backgroundColor='backgroundSurface'
+                borderColor='backgroundSurfaceBorder'
+                borderTopWidth={1}
+                borderLeftWidth={1}
+                borderRightWidth={1}
+                borderRadius={24}
+                padding='s8'
+                shadowColor='shadowColor'
+                shadowOffset={{ width: 0, height: 8 }}
+                shadowOpacity={0.8}
+                shadowRadius={16}
+                marginBottom='s8'
+              >
+                <Text variant='h2'>{item.full_title}</Text>
+                <Text variant='label'>{item.content_rating}</Text>
+                <Box flexDirection='row' justifyContent='space-between'>
+                  <Box flexDirection='row'>
+                    <Text variant='label'>Seasons: </Text>
+                    <Text variant='body'>{item.season_count}</Text>
+                  </Box>
+                  <Box flexDirection='row'>
+                    <Text variant='label'>Episodes: </Text>
+                    <Text variant='body'>{item.episode_count}</Text>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
+            </Pressable>
           ))}
         </ScrollView>
       ) : (
