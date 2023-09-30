@@ -45,9 +45,35 @@ export default function TVSeriesCollection() {
         <AddFAB onPress={() => {}} />
       </Box>
       {!!tvSeries ? (
-        <ScrollView>
+        <ScrollView style={{ padding: 24 }}>
           {tvSeries.map((item, index) => (
-            <Text>{item.full_title}</Text>
+            <Box
+              key={item.id}
+              backgroundColor='backgroundSurface'
+              borderColor='backgroundSurfaceBorder'
+              borderTopWidth={1}
+              borderLeftWidth={1}
+              borderRightWidth={1}
+              borderRadius={24}
+              padding='s8'
+              shadowColor='shadowColor'
+              shadowOffset={{ width: 0, height: 8 }}
+              shadowOpacity={0.8}
+              shadowRadius={16}
+            >
+              <Text variant='h2'>{item.full_title}</Text>
+              <Text variant='label'>{item.content_rating}</Text>
+              <Box flexDirection='row' justifyContent='space-between'>
+                <Box flexDirection='row'>
+                  <Text variant='label'>Seasons: </Text>
+                  <Text variant='body'>{item.season_count}</Text>
+                </Box>
+                <Box flexDirection='row'>
+                  <Text variant='label'>Episodes: </Text>
+                  <Text variant='body'>{item.episode_count}</Text>
+                </Box>
+              </Box>
+            </Box>
           ))}
         </ScrollView>
       ) : (
