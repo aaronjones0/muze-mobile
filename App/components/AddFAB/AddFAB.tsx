@@ -1,7 +1,6 @@
+import { useTheme } from '@shopify/restyle';
 import { Pressable } from 'react-native';
 import Box from '../Box/Box';
-import { useTheme } from '@shopify/restyle';
-import { Ionicons } from '@expo/vector-icons';
 import Text from '../Text/Text';
 
 export default function AddFAB({ onPress }: { onPress: () => void }) {
@@ -26,7 +25,6 @@ export default function AddFAB({ onPress }: { onPress: () => void }) {
       shadowRadius={16}
     >
       <Pressable onPress={() => onPress()} style={{ alignItems: 'center' }}>
-        {/* <Ionicons name='add' size={size} color={theme.colors.text1} /> */}
         <Text variant='h2'>Add</Text>
       </Pressable>
     </Box>

@@ -179,6 +179,32 @@ const theme = createTheme({
       color: 'text1',
     },
   },
+  surfaceVariants: {
+    defaults: {
+      backgroundColor: 'backgroundSurface',
+      borderColor: 'backgroundSurfaceBorder',
+      borderLeftWidth: 1,
+      borderTopWidth: 1,
+      borderRightWidth: 1,
+      borderRadius: 's12',
+      shadowColor: 'shadowColor',
+      shadowOffset: { width: 0, height: 4 },
+      shadowRadius: 8,
+      shadowOpacity: 0.8,
+    },
+    primarySurface: {
+      backgroundColor: 'primarySurface',
+      borderColor: 'primarySurfaceBorder',
+    },
+    cardSurface: {
+      backgroundColor: 'cardSurface',
+      borderColor: 'cardSurfaceBorder',
+    },
+    panelSurface: {
+      backgroundColor: 'panelSurface',
+      borderColor: 'panelSurfaceBorder',
+    },
+  },
 });
 
 export type Theme = typeof theme;

@@ -3,27 +3,24 @@ import Box from '../Box/Box';
 import Text from '../Text/Text';
 import { useTheme } from '@shopify/restyle';
 
-export interface InputProps {
+export interface NumericInputProps {
   label: string;
-  value: string;
-  onValueChange: (text: string) => void;
+  value: number;
+  onValueChange: (value: number) => void;
   editing?: boolean;
-  multiline?: boolean;
 }
 
-export default function Input({
+export default function NumericInput({
   label,
   value,
   onValueChange,
   editing,
-  multiline,
-}: InputProps) {
+}: NumericInputProps) {
   const theme = useTheme();
   const colors = theme.colors;
 
   return (
     <Box
-      height={multiline ? '100%' : null}
       width='100%'
       paddingVertical='s4'
       paddingHorizontal='s6'
@@ -34,11 +31,11 @@ export default function Input({
     >
       <Text variant='label'>{label}</Text>
       <TextInput
-        multiline={multiline}
-        value={value}
-        onChangeText={(text) => onValueChange(text)}
+        value={value.toString()}
+        onChangeText={(value) => onValueChange(+value)}
         editable={editing}
-        style={{ color: colors.text1, fontSize: 20, fontWeight: '500' }}
+        style={{ color: colors.text1, fontSize: 16 }}
+        keyboardType='numeric'
       />
     </Box>
   );

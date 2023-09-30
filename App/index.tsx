@@ -14,6 +14,7 @@ import Collection from './views/collection/collection';
 import Home from './views/home/home';
 import Test from './views/test';
 import TVSeriesCollection from './views/TVSeriesCollection/TVSeriesCollection';
+import TVSeriesAdd from './views/TVSeriesAdd/TVSeriesAdd';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -60,6 +61,7 @@ export default function App() {
                   name={`TV Series'`}
                   component={TVSeriesCollection}
                 />
+                <Stack.Screen name={'Add TV Series'} component={TVSeriesAdd} />
                 <Stack.Screen name='Test' component={Test} />
                 <Stack.Screen name='Profile'>
                   {(props) => (

@@ -7,7 +7,7 @@ import { useAuth } from '../../../lib/providers/AuthProvider';
 import { supabase } from '../../../lib/supabase';
 import AddFAB from '../../components/AddFAB/AddFAB';
 
-export default function TVSeriesCollection() {
+export default function TVSeriesCollection({ navigation }) {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [tvSeries, setTvSeries] = useState<TVSeries[] | null>(null);
@@ -41,8 +41,8 @@ export default function TVSeriesCollection() {
 
   return (
     <Box height='100%' backgroundColor='backgroundSurface'>
-      <Box position='absolute' bottom={56} alignSelf='center'>
-        <AddFAB onPress={() => {}} />
+      <Box position='absolute' bottom={56} alignSelf='center' zIndex={10}>
+        <AddFAB onPress={() => navigation.navigate('Add TV Series')} />
       </Box>
       {!!tvSeries ? (
         <ScrollView style={{ padding: 24 }}>
@@ -60,6 +60,7 @@ export default function TVSeriesCollection() {
               shadowOffset={{ width: 0, height: 8 }}
               shadowOpacity={0.8}
               shadowRadius={16}
+              marginBottom='s8'
             >
               <Text variant='h2'>{item.full_title}</Text>
               <Text variant='label'>{item.content_rating}</Text>

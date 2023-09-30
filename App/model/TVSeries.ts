@@ -1,7 +1,7 @@
 export interface TVSeries {
-  id: string;
-  user_id: string;
-  created_at: string;
+  id?: string;
+  user_id?: string;
+  created_at?: string;
   full_title: string | null;
   short_title: string | null;
   synopsis: string | null;
