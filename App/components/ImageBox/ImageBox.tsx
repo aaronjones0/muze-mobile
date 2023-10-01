@@ -9,19 +9,24 @@ import Text from '../Text/Text';
 // Image item component that displays the image from Supabase Storage and a delte button
 const ImageBox = ({
   item,
-  userId,
+  // userId,
   onRemoveImage,
+  bucket,
+  path,
 }: {
   // url: string | null;
   item: FileObject;
-  userId: string;
+  // userId: string;
   onRemoveImage: () => void;
+  bucket: string;
+  path: string;
 }) => {
   const [image, setImage] = useState<string>('');
 
   supabase.storage
-    .from('avatars')
-    .download(`${userId}/${item.name}`)
+    .from(bucket)
+    .download(`${path}/${item.name}`)
+    // .download(`${userId}/${item.name}`)
     .then(({ data }) => {
       const fr = new FileReader();
       fr.readAsDataURL(data!);

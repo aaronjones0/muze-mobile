@@ -8,6 +8,7 @@ import ImageBox from '../components/ImageBox/ImageBox';
 import { useTheme } from '@shopify/restyle';
 
 export default function Test({ navigation }) {
+  const bucket = 'avatars';
   const { user } = useAuth();
   const [avatar, setAvatar] = useState<FileObject | null>(null);
   const [avatars, setAvatars] = useState<FileObject[] | null>(null);
@@ -43,14 +44,19 @@ export default function Test({ navigation }) {
       flexDirection='column'
       justifyContent='space-between'
     >
-      <Button title='Home' onPress={() => navigation.navigate('Home')} color={theme.colors.primary}></Button>
+      <Button
+        title='Home'
+        onPress={() => navigation.navigate('Home')}
+        color={theme.colors.primary}
+      ></Button>
       {!!avatars && (
         <ScrollView>
           {avatars.map((item, index) => (
             <ImageBox
               key={item.id}
               item={item}
-              userId={user!.id}
+              bucket={bucket}
+              path={user.id}
               onRemoveImage={() => onRemoveImage(item, index)}
             />
           ))}
