@@ -154,7 +154,10 @@ export default function TVSeriesAdd({ navigation }) {
                 />
               </Box>
             </Pressable>
-            <Pressable onPress={() => saveTVSeries()} style={{ flexGrow: 1 }}>
+            <Pressable
+              onPress={() => navigation.navigate(`TV Series'`)}
+              style={{ flexGrow: 1 }}
+            >
               <Box
                 backgroundColor='backgroundSurface'
                 borderColor='backgroundSurfaceBorder'

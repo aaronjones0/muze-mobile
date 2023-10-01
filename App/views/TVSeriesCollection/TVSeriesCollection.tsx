@@ -1,4 +1,4 @@
-import { Alert, Pressable, ScrollView } from 'react-native';
+import { Alert, Pressable, RefreshControl, ScrollView } from 'react-native';
 import Box from '../../components/Box/Box';
 import Text from '../../components/Text/Text';
 import { useEffect, useState } from 'react';
@@ -10,6 +10,7 @@ import AddFAB from '../../components/AddFAB/AddFAB';
 export default function TVSeriesCollection({ navigation }) {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const [tvSeries, setTvSeries] = useState<TVSeries[] | null>(null);
 
   useEffect(() => {
@@ -22,8 +23,6 @@ export default function TVSeriesCollection({ navigation }) {
     try {
       setLoading(true);
       const { data, error } = await supabase.from('tv_series').select('*');
-
-      console.debug(data);
 
       if (!!error) {
         throw error;
@@ -45,15 +44,23 @@ export default function TVSeriesCollection({ navigation }) {
         <AddFAB onPress={() => navigation.navigate('Add TV Series')} />
       </Box>
       {!!tvSeries ? (
-        <ScrollView style={{ padding: 24 }}>
+        <ScrollView
+          style={{ padding: 24 }}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => loadTVSeries(user.id)}
+            />
+          }
+        >
           {tvSeries.map((item, index) => (
             <Pressable
+              key={item.id}
               onPress={() =>
                 navigation.navigate('TV Series Detail', { tvSeriesId: item.id })
               }
             >
               <Box
-                key={item.id}
                 backgroundColor='backgroundSurface'
                 borderColor='backgroundSurfaceBorder'
                 borderTopWidth={1}
