@@ -79,7 +79,6 @@ export default function TVSeriesCard({
               style={{
                 position: 'absolute',
                 width: '100%',
-                // width: 150,
                 height: 150,
                 resizeMode: 'cover',
               }}
@@ -90,7 +89,6 @@ export default function TVSeriesCard({
               style={{
                 position: 'absolute',
                 width: '100%',
-                // width: 150,
                 height: 150,
                 resizeMode: 'contain',
               }}
@@ -100,7 +98,7 @@ export default function TVSeriesCard({
         )}
         <Box paddingTop='s4' paddingHorizontal='s8' paddingBottom='s8'>
           <Text variant='h2'>{tvSeries.full_title}</Text>
-          <Text variant='label'>{tvSeries.content_rating}</Text>
+          {/* <Text variant='label'>{tvSeries.content_rating}</Text>
           <Box flexDirection='row' justifyContent='space-between'>
             <Box flexDirection='row'>
               <Text variant='label'>Seasons: </Text>
@@ -110,7 +108,7 @@ export default function TVSeriesCard({
               <Text variant='label'>Episodes: </Text>
               <Text variant='body'>{tvSeries.episode_count}</Text>
             </Box>
-          </Box>
+          </Box> */}
         </Box>
       </Box>
     </Pressable>

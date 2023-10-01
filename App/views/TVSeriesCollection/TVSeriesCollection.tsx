@@ -76,7 +76,8 @@ export default function TVSeriesCollection({ navigation }) {
       </Box>
       {!!tvSeries ? (
         <ScrollView
-          style={{ paddingTop: 24, paddingHorizontal: 24, paddingBottom: 96 }}
+          style={{ padding: 24 }}
+          contentContainerStyle={{ paddingBottom: 124 }}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -85,40 +86,6 @@ export default function TVSeriesCollection({ navigation }) {
           }
         >
           {tvSeries.map((item, index) => (
-            // <Pressable
-            //   key={item.id}
-            //   onPress={() =>
-            //     navigation.navigate('TV Series Detail', { tvSeriesId: item.id })
-            //   }
-            // >
-            //   <Box
-            //     backgroundColor='backgroundSurface'
-            //     borderColor='backgroundSurfaceBorder'
-            //     borderTopWidth={1}
-            //     borderLeftWidth={1}
-            //     borderRightWidth={1}
-            //     borderRadius={24}
-            //     padding='s8'
-            //     shadowColor='shadowColor'
-            //     shadowOffset={{ width: 0, height: 8 }}
-            //     shadowOpacity={0.8}
-            //     shadowRadius={16}
-            //     marginBottom='s8'
-            //   >
-            //     <Text variant='h2'>{item.full_title}</Text>
-            //     <Text variant='label'>{item.content_rating}</Text>
-            //     <Box flexDirection='row' justifyContent='space-between'>
-            //       <Box flexDirection='row'>
-            //         <Text variant='label'>Seasons: </Text>
-            //         <Text variant='body'>{item.season_count}</Text>
-            //       </Box>
-            //       <Box flexDirection='row'>
-            //         <Text variant='label'>Episodes: </Text>
-            //         <Text variant='body'>{item.episode_count}</Text>
-            //       </Box>
-            //     </Box>
-            //   </Box>
-            // </Pressable>
             <TVSeriesCard
               key={item.id}
               onPress={() =>
