@@ -2,6 +2,7 @@ import { Button } from 'react-native';
 import Box from '../../components/Box/Box';
 import Text from '../../components/Text/Text';
 import { useTheme } from '@shopify/restyle';
+import CollectionTile from '../../components/CollectionTile/CollectionTile';
 
 export default function Home({ navigation }) {
   const theme = useTheme();
@@ -15,10 +16,24 @@ export default function Home({ navigation }) {
       paddingBottom='s40'
       flex={1}
       flexDirection='column'
-      justifyContent='space-between'
+      justifyContent='flex-end'
+      gap='s8'
     >
-      <Text variant='h1'>Home</Text>
-      <Box style={{display: 'flex', flexDirection: 'row', width: '100%', gap: 16}}>
+      <CollectionTile
+        name={`TV Series'`}
+        onPress={() => navigation.navigate(`TV Series'`)}
+      />
+      <CollectionTile name={`Movies`} onPress={() => {}} />
+      <CollectionTile name={`Video Games`} onPress={() => {}} />
+      <CollectionTile name={`Books`} onPress={() => {}} />
+      <Box
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          width: '100%',
+          gap: 16,
+        }}
+      >
         <Box
           backgroundColor='backgroundSurface'
           borderColor='backgroundSurfaceBorder'
@@ -52,8 +67,8 @@ export default function Home({ navigation }) {
           flexGrow={1}
         >
           <Button
-            title='Account'
-            onPress={() => navigation.navigate('Account')}
+            title='Profile'
+            onPress={() => navigation.navigate('Profile')}
             color={theme.colors.primary}
           />
         </Box>
