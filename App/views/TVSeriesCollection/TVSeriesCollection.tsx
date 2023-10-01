@@ -13,6 +13,7 @@ import { useAuth } from '../../../lib/providers/AuthProvider';
 import { supabase } from '../../../lib/supabase';
 import AddFAB from '../../components/AddFAB/AddFAB';
 import TVSeriesCard from '../../components/TVSeriesCard/TVSeriesCard';
+import ImageCard from '../../components/ImageCard/ImageCard';
 
 export default function TVSeriesCollection({ navigation }) {
   const storageBucket = 'tv_series';
@@ -77,7 +78,7 @@ export default function TVSeriesCollection({ navigation }) {
       {!!tvSeries ? (
         <ScrollView
           style={{ padding: 24 }}
-          contentContainerStyle={{ paddingBottom: 124 }}
+          contentContainerStyle={{ paddingBottom: 124, gap: 16 }}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -86,14 +87,26 @@ export default function TVSeriesCollection({ navigation }) {
           }
         >
           {tvSeries.map((item, index) => (
-            <TVSeriesCard
-              key={item.id}
-              onPress={() =>
-                navigation.navigate('TV Series Detail', { tvSeriesId: item.id })
-              }
-              tvSeries={item}
-              userId={user.id}
-            />
+            // <TVSeriesCard
+            //   key={item.id}
+            //   onPress={() =>
+            //     navigation.navigate('TV Series Detail', { tvSeriesId: item.id })
+            //   }
+            //   tvSeries={item}
+            //   userId={user.id}
+            // />
+            <Box key={item.id}>
+              <ImageCard
+                bucket={storageBucket}
+                caption={item.full_title}
+                onPress={() =>
+                  navigation.navigate('TV Series Detail', {
+                    tvSeriesId: item.id,
+                  })
+                }
+                path={`${user.id}/${item.id}`}
+              />
+            </Box>
           ))}
         </ScrollView>
       ) : (
